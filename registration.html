@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(to right, #2575fc, #6a11cb);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #eaeaea;
+        }
+        
+        .nav-btn {
+            padding: 12px 30px;
+            margin: 0 10px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .customer-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        .staff-btn {
+            background-color: #FF9800;
+            color: white;
+        }
+        
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-btn.active {
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.8);
+        }
+        
+        .page-container {
+            padding: 40px;
+            min-height: 600px;
+        }
+        
+        .registration-page {
+            display: none;
+        }
+        
+        .registration-page.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .page-title {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .required::after {
+            content: " *";
+            color: #e53935;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #6a11cb;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .checkbox-group input {
+            width: auto;
+        }
+        
+        .form-footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            text-align: center;
+        }
+        
+        .submit-btn {
+            padding: 16px 45px;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(106, 17, 203, 0.3);
+        }
+        
+        .confirmation-page {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .confirmation-icon {
+            font-size: 5rem;
+            color: #4CAF50;
+            margin-bottom: 30px;
+        }
+        
+        .confirmation-page h2 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .confirmation-page p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+        }
+        
+        .back-btn {
+            padding: 14px 35px;
+            background-color: #f0f0f0;
+            color: #333;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .error-message {
+            color: #e53935;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .form-group.error input, 
+        .form-group.error select, 
+        .form-group.error textarea {
+            border-color: #e53935;
+        }
+        
+        .form-group.success input, 
+        .form-group.success select, 
+        .form-group.success textarea {
+            border-color: #4CAF50;
+        }
+        
+        .note {
+            font-size: 0.9rem;
+            color: #777;
+            margin-top: 5px;
+        }
+        
+        .admin-approval-note {
+            background-color: #FFF3CD;
+            border-left: 5px solid #FFC107;
+            padding: 15px;
+            margin: 25px 0;
+            border-radius: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .nav-btn {
+                width: 100%;
+                margin: 5px 0;
+            }
+            
+            .page-container {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Registration Portal</h1>
+            <p>Join our platform as a customer or staff member</p>
+        </header>
+        
+        <div class="nav-buttons">
+            <button class="nav-btn customer-btn active" id="customerNavBtn">
+                <i class="fas fa-user"></i> Customer Registration
+            </button>
+            <button class="nav-btn staff-btn" id="staffNavBtn">
+                <i class="fas fa-user-tie"></i> Staff Registration
+            </button>
+        </div>
+        
+        <div class="page-container">
+            <!-- Customer Registration Page -->
+            <div class="registration-page active" id="customerPage">
+                <h2 class="page-title">Customer Registration</h2>
+                <div class="form-container">
+                    <form id="customerForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="customerFirstName" class="required">First Name</label>
+                                <input type="text" id="customerFirstName" placeholder="Enter your first name">
+                                <div class="error-message" id="customerFirstNameError">First name is required</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="customerLastName" class="required">Last Name</label>
+                                <input type="text" id="customerLastName" placeholder="Enter your last name">
+                                <div class="error-message" id="customerLastNameError">Last name is required</div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="customerEmail" class="required">Email Address</label>
+                            <input type="email" id="customerEmail" placeholder="Enter your email address">
+                            <div class="error-message" id="customerEmailError">Valid email is required</div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="customerPassword" class="required">Password</label>
+                                <input type="password" id="customerPassword" placeholder="Create a password">
+                                <div class="error-message" id="customerPasswordError">Password must be at least 8 characters</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="customerConfirmPassword" class="required">Confirm Password</label>
+                                <input type="password" id="customerConfirmPassword" placeholder="Confirm your password">
+                                <div class="error-message" id="customerConfirmPasswordError">Passwords must match</div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="customerPhone">Phone Number</label>
+                            <input type="tel" id="customerPhone" placeholder="Enter your phone number">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="customerAddress">Address</label>
+                            <textarea id="customerAddress" rows="3" placeholder="Enter your address"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="customerTerms" name="customerTerms">
+                                <label for="customerTerms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
+                            </div>
+                            <div class="error-message" id="customerTermsError">You must agree to the terms</div>
+                        </div>
+                        
+                        <div class="form-footer">
+                            <button type="submit" class="submit-btn">Create Customer Account</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Staff Registration Page -->
+            <div class="registration-page" id="staffPage">
+                <h2 class="page-title">Staff Registration</h2>
+                <div class="form-container">
+                    <div class="admin-approval-note">
+                        <i class="fas fa-info-circle"></i> Staff registration requires admin approval. Your account will be activated after review by an administrator.
+                    </div>
+                    
+                    <form id="staffForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="staffFirstName" class="required">First Name</label>
+                                <input type="text" id="staffFirstName" placeholder="Enter your first name">
+                                <div class="error-message" id="staffFirstNameError">First name is required</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="staffLastName" class="required">Last Name</label>
+                                <input type="text" id="staffLastName" placeholder="Enter your last name">
+                                <div class="error-message" id="staffLastNameError">Last name is required</div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="staffEmail" class="required">Email Address</label>
+                            <input type="email" id="staffEmail" placeholder="Enter your work email address">
+                            <div class="error-message" id="staffEmailError">Valid email is required</div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="staffPassword" class="required">Password</label>
+                                <input type="password" id="staffPassword" placeholder="Create a password">
+                                <div class="error-message" id="staffPasswordError">Password must be at least 10 characters</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="staffConfirmPassword" class="required">Confirm Password</label>
+                                <input type="password" id="staffConfirmPassword" placeholder="Confirm your password">
+                                <div class="error-message" id="staffConfirmPasswordError">Passwords must match</div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="staffDepartment" class="required">Department</label>
+                                <select id="staffDepartment">
+                                    <option value="">Select Department</option>
+                                    <option value="sales">Sales</option>
+                                    <option value="marketing">Marketing</option>
+                                    <option value="support">Customer Support</option>
+                                    <option value="it">IT</option>
+                                    <option value="hr">Human Resources</option>
+                                    <option value="finance">Finance</option>
+                                </select>
+                                <div class="error-message" id="staffDepartmentError">Department is required</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="staffPosition">Position</label>
+                                <input type="text" id="staffPosition" placeholder="Enter your position">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="staffEmployeeId">Employee ID</label>
+                            <input type="text" id="staffEmployeeId" placeholder="Enter your employee ID (if available)">
+                            <div class="note">If you don't have an employee ID yet, leave this field blank</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="staffReason">Why do you want to join as staff?</label>
+                            <textarea id="staffReason" rows="4" placeholder="Please briefly explain why you're registering as staff"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="staffTerms" name="staffTerms">
+                                <label for="staffTerms">I agree to the <a href="#">Staff Terms of Service</a> and <a href="#">Confidentiality Agreement</a></label>
+                            </div>
+                            <div class="error-message" id="staffTermsError">You must agree to the terms</div>
+                        </div>
+                        
+                        <div class="form-footer">
+                            <button type="submit" class="submit-btn">Submit Staff Registration</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Customer Confirmation Page -->
+            <div class="registration-page confirmation-page" id="customerConfirmationPage">
+                <div class="confirmation-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h2>Customer Registration Successful!</h2>
+                <p>Thank you for registering as a customer. Your account has been created successfully. You can now log in to access your account and start using our services.</p>
+                <p>We've sent a confirmation email to your registered email address with further instructions.</p>
+                <button class="back-btn" id="customerBackBtn">Return to Registration</button>
+            </div>
+            
+            <!-- Staff Confirmation Page -->
+            <div class="registration-page confirmation-page" id="staffConfirmationPage">
+                <div class="confirmation-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <h2>Staff Registration Submitted!</h2>
+                <p>Your staff registration has been submitted successfully and is pending admin approval. You will receive an email notification once your account has been reviewed and activated by an administrator.</p>
+                <p>This process typically takes 1-3 business days. Thank you for your patience.</p>
+                <button class="back-btn" id="staffBackBtn">Return to Registration</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const customerNavBtn = document.getElementById('customerNavBtn');
+        const staffNavBtn = document.getElementById('staffNavBtn');
+        const customerPage = document.getElementById('customerPage');
+        const staffPage = document.getElementById('staffPage');
+        const customerForm = document.getElementById('customerForm');
+        const staffForm = document.getElementById('staffForm');
+        const customerConfirmationPage = document.getElementById('customerConfirmationPage');
+        const staffConfirmationPage = document.getElementById('staffConfirmationPage');
+        const customerBackBtn = document.getElementById('customerBackBtn');
+        const staffBackBtn = document.getElementById('staffBackBtn');
+        
+        // Navigation between customer and staff registration
+        customerNavBtn.addEventListener('click', () => {
+            setActivePage('customer');
+        });
+        
+        staffNavBtn.addEventListener('click', () => {
+            setActivePage('staff');
+        });
+        
+        function setActivePage(page) {
+            // Update navigation buttons
+            customerNavBtn.classList.toggle('active', page === 'customer');
+            staffNavBtn.classList.toggle('active', page === 'staff');
+            
+            // Show/hide registration pages
+            customerPage.classList.toggle('active', page === 'customer');
+            staffPage.classList.toggle('active', page === 'staff');
+            
+            // Hide confirmation pages
+            customerConfirmationPage.classList.remove('active');
+            staffConfirmationPage.classList.remove('active');
+        }
+        
+        // Customer form validation and submission
+        customerForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Reset previous errors
+            resetErrors('customer');
+            
+            // Validate form
+            let isValid = validateCustomerForm();
+            
+            if (isValid) {
+                // Show confirmation page
+                customerPage.classList.remove('active');
+                customerConfirmationPage.classList.add('active');
+            }
+        });
+        
+        function validateCustomerForm() {
+            let isValid = true;
+            
+            // First name validation
+            const firstName = document.getElementById('customerFirstName').value.trim();
+            if (!firstName) {
+                showError('customerFirstNameError', true);
+                markFieldError('customerFirstName', true);
+                isValid = false;
+            } else {
+                markFieldError('customerFirstName', false);
+            }
+            
+            // Last name validation
+            const lastName = document.getElementById('customerLastName').value.trim();
+            if (!lastName) {
+                showError('customerLastNameError', true);
+                markFieldError('customerLastName', true);
+                isValid = false;
+            } else {
+                markFieldError('customerLastName', false);
+            }
+            
+            // Email validation
+            const email = document.getElementById('customerEmail').value.trim();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!email || !emailRegex.test(email)) {
+                showError('customerEmailError', true);
+                markFieldError('customerEmail', true);
+                isValid = false;
+            } else {
+                markFieldError('customerEmail', false);
+            }
+            
+            // Password validation
+            const password = document.getElementById('customerPassword').value;
+            if (!password || password.length < 8) {
+                showError('customerPasswordError', true);
+                markFieldError('customerPassword', true);
+                isValid = false;
+            } else {
+                markFieldError('customerPassword', false);
+            }
+            
+            // Confirm password validation
+            const confirmPassword = document.getElementById('customerConfirmPassword').value;
+            if (!confirmPassword || confirmPassword !== password) {
+                showError('customerConfirmPasswordError', true);
+                markFieldError('customerConfirmPassword', true);
+                isValid = false;
+            } else {
+                markFieldError('customerConfirmPassword', false);
+            }
+            
+            // Terms validation
+            const terms = document.getElementById('customerTerms').checked;
+            if (!terms) {
+                showError('customerTermsError', true);
+                isValid = false;
+            }
+            
+            return isValid;
+        }
+        
+        // Staff form validation and submission
+        staffForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Reset previous errors
+            resetErrors('staff');
+            
+            // Validate form
+            let isValid = validateStaffForm();
+            
+            if (isValid) {
+                // Show confirmation page
+                staffPage.classList.remove('active');
+                staffConfirmationPage.classList.add('active');
+            }
+        });
+        
+        function validateStaffForm() {
+            let isValid = true;
+            
+            // First name validation
+            const firstName = document.getElementById('staffFirstName').value.trim();
+            if (!firstName) {
+                showError('staffFirstNameError', true);
+                markFieldError('staffFirstName', true);
+                isValid = false;
+            } else {
+                markFieldError('staffFirstName', false);
+            }
+            
+            // Last name validation
+            const lastName = document.getElementById('staffLastName').value.trim();
+            if (!lastName) {
+                showError('staffLastNameError', true);
+                markFieldError('staffLastName', true);
+                isValid = false;
+            } else {
+                markFieldError('staffLastName', false);
+            }
+            
+            // Email validation
+            const email = document.getElementById('staffEmail').value.trim();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!email || !emailRegex.test(email)) {
+                showError('staffEmailError', true);
+                markFieldError('staffEmail', true);
+                isValid = false;
+            } else {
+                markFieldError('staffEmail', false);
+            }
+            
+            // Password validation
+            const password = document.getElementById('staffPassword').value;
+            if (!password || password.length < 10) {
+                showError('staffPasswordError', true);
+                markFieldError('staffPassword', true);
+                isValid = false;
+            } else {
+                markFieldError('staffPassword', false);
+            }
+            
+            // Confirm password validation
+            const confirmPassword = document.getElementById('staffConfirmPassword').value;
+            if (!confirmPassword || confirmPassword !== password) {
+                showError('staffConfirmPasswordError', true);
+                markFieldError('staffConfirmPassword', true);
+                isValid = false;
+            } else {
+                markFieldError('staffConfirmPassword', false);
+            }
+            
+            // Department validation
+            const department = document.getElementById('staffDepartment').value;
+            if (!department) {
+                showError('staffDepartmentError', true);
+                markFieldError('staffDepartment', true);
+                isValid = false;
+            } else {
+                markFieldError('staffDepartment', false);
+            }
+            
+            // Terms validation
+            const terms = document.getElementById('staffTerms').checked;
+            if (!terms) {
+                showError('staffTermsError', true);
+                isValid = false;
+            }
+            
+            return isValid;
+        }
+        
+        // Helper functions
+        function showError(errorElementId, show) {
+            const errorElement = document.getElementById(errorElementId);
+            errorElement.style.display = show ? 'block' : 'none';
+        }
+        
+        function markFieldError(fieldId, isError) {
+            const field = document.getElementById(fieldId);
+            const formGroup = field.closest('.form-group');
+            
+            if (isError) {
+                formGroup.classList.add('error');
+                formGroup.classList.remove('success');
+            } else {
+                formGroup.classList.remove('error');
+                formGroup.classList.add('success');
+            }
+        }
+        
+        function resetErrors(formType) {
+            const errorMessages = document.querySelectorAll(`#${formType}Form .error-message`);
+            errorMessages.forEach(error => {
+                error.style.display = 'none';
+            });
+            
+            const formGroups = document.querySelectorAll(`#${formType}Form .form-group`);
+            formGroups.forEach(group => {
+                group.classList.remove('error', 'success');
+            });
+        }
+        
+        // Back button functionality
+        customerBackBtn.addEventListener('click', () => {
+            customerConfirmationPage.classList.remove('active');
+            setActivePage('customer');
+            customerForm.reset();
+            resetErrors('customer');
+        });
+        
+        staffBackBtn.addEventListener('click', () => {
+            staffConfirmationPage.classList.remove('active');
+            setActivePage('staff');
+            staffForm.reset();
+            resetErrors('staff');
+        });
+        
+        // Real-time validation for customer form
+        document.getElementById('customerFirstName').addEventListener('blur', function() {
+            if (this.value.trim()) {
+                markFieldError('customerFirstName', false);
+            } else {
+                markFieldError('customerFirstName', true);
+            }
+        });
+        
+        document.getElementById('customerEmail').addEventListener('blur', function() {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (this.value.trim() && emailRegex.test(this.value.trim())) {
+                markFieldError('customerEmail', false);
+            } else {
+                markFieldError('customerEmail', true);
+            }
+        });
+        
+        document.getElementById('customerPassword').addEventListener('input', function() {
+            if (this.value.length >= 8) {
+                markFieldError('customerPassword', false);
+            } else {
+                markFieldError('customerPassword', true);
+            }
+        });
+        
+        document.getElementById('customerConfirmPassword').addEventListener('input', function() {
+            const password = document.getElementById('customerPassword').value;
+            if (this.value === password && password.length >= 8) {
+                markFieldError('customerConfirmPassword', false);
+            } else {
+                markFieldError('customerConfirmPassword', true);
+            }
+        });
+    </script>
+</body>
+</html>
